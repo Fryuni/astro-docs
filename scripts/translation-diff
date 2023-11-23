@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+# Git project root
+cd $(git rev-parse --show-toplevel)
+
+TARGET_LANGUAGE=$1
+TARGET_FILE=$2
+
+print_help() {
+	cat <<EOF >&2
+translation-diff <language> <file>
+
+  <language>    The translation language to compute latest changes
+  <file>        File to show changes. Can be relative to the language or project root.
+EOF
+	exit 1
+}
+
+if [ -z "$TARGET_LANGUAGE" ]; then
+	print_help
+fi
+
+if [ -z "$TARGET_FILE" ]; then
+	print_help
+fi
+
+if [ -f "src/content/docs/$TARGET_LANGUAGE/$TARGET_FILE" ]; then
+	ORIGINAL_FILE="src/content/docs/en/$TARGET_FILE" 
+	TRANSLATED_FILE="src/content/docs/$TARGET_LANGUAGE/$TARGET_FILE" 
+elif [ -f "src/i18n/$TARGET_LANGUAGE/$TARGET_FILE" ]; then
+	ORIGINAL_FILE="src/i18n/en/$TARGET_FILE" 
+	TRANSLATED_FILE="src/i18n/$TARGET_LANGUAGE/$TARGET_FILE" 
+else
+	echo "File $TARGET_FILE not found" >&2
+	exit 1
+fi
+
+LATEST_TRANSLATED_COMMIT=$(git log -n1 --format=%H -- "$TRANSLATED_FILE")
+
+exec git diff "$LATEST_TRANSLATED_COMMIT...HEAD" -- "$ORIGINAL_FILE"
