@@ -131,7 +131,7 @@ Este componente, quando importado e renderizado em outros componentes Astro, lay
 ---
 // src/components/CartaoSaudacoes.astro
 import TituloSaudacao from './TituloSaudacao.astro';
-const nome = "Astro"
+const nome = 'Astro';
 ---
 <h1>Cartão de Saudações</h1>
 <TituloSaudacao saudacao="Oi" nome={nome} />
@@ -180,7 +180,7 @@ import Cabecalho from './Cabecalho.astro';
 import Logo from './Logo.astro';
 import Rodape from './Rodape.astro';
 
-const { titulo } = Astro.props
+const { titulo } = Astro.props;
 ---
 <div id="invólucro-do-conteúdo">
   <Cabecalho />
@@ -248,13 +248,50 @@ import Involucro from '../components/Involucro.astro';
 </Involucro>
 ```
 
-
+:::tip
 Use um atributo `slot="meu-slot"` no elemento filho que você quer passar através de um correspondente placeholder `<slot name="meu-slot"/>` no seu componente.
+:::
+
+Para passar múltiplos elementos HTML no placeholder `<slot/>` de um component sem encapsulá-los em uma `<div>`, use o atributo `slot=""` no [componente `<Fragment/>` do Astro](/pt-br/reference/api-reference/#fragment-):
+
+```astro title="src/components/CustomTable.astro" "<slot name="header"/>" "<slot name="body"/>"
+---
+// Cria uma tabela customizada com slots nomeados como placeholders para o conteúdo do corpo e cabeçalho
+---
+<table class="bg-white">
+  <thead class="sticky top-0 bg-white"><slot name="header"/></thead>
+  <tbody class="[&_tr:nth-child(odd)]:bg-gray-100"><slot name="body"/></tbody>
+</table>
+```
+
+Injeto múltiplas linhas e colunas de conteúdo HTML utilizando um atributo `slot=""` para especificar o conteúdo do cabeçalho (`"header"`) e do corpo (`"body"`). Elementos HTML individuais também podem ser estilizados:
+
+```astro title="src/components/StockTable.astro" {5-7, 9-13} '<Fragment slot="header">' '<Fragment slot="body">'
+---
+import CustomTable from './CustomTable.astro';
+---
+<CustomTable>
+  <Fragment slot="header"> <!-- passe o cabeçalho da tabela -->
+    <tr><th>Nome do produto</th><th>Unidades em estoque</th></tr>
+  </Fragment>
+
+  <Fragment slot="body"> <!-- passe o corpo da tabela -->
+    <tr><td>Sandálias</td><td>64</td></tr>
+    <tr><td>Botas</td><td>32</td></tr>
+    <tr><td>Tênis</td><td class="text-red-500">0</td></tr>
+  </Fragment>
+</CustomTable>
+```
 
 Note que slots nomeados precisam ser um filho imediato de um componente. Você não pode passar slots nomeados através de elementos aninhados.
 
 :::tip
 Slots nomeados também podem ser passados para [componentes de frameworks de UI](/pt-br/core-concepts/framework-components/)!
+:::
+
+
+:::note
+O nome de um slot do Astro não pode ser gerado dinamicamente, como dentro de uma função `map`. Se essa funcionalidade for necessária dentro de um componente de framework de UI, pode ser melhor gerar esses slots dinâmicos dentro do próprio framework.
 :::
 
 
@@ -268,7 +305,7 @@ import Cabecalho from './Cabecalho.astro';
 import Logo from './Logo.astro';
 import Rodape from './Rodape.astro';
 
-const { titulo } = Astro.props
+const { titulo } = Astro.props;
 ---
 <div id="invólucro-do-conteúdo">
   <Cabecalho />
@@ -285,11 +322,9 @@ const { titulo } = Astro.props
 
 Slots podem ser transferidos para outros componentes. Por exemplo, quando criando layouts aninhados:
 
-```astro {11,14}
-// src/layouts/LayoutBase.astro
+```astro title="src/layouts/LayoutBase.astro" {9,12}
 ---
 ---
-
 <html lang="pt-BR">
 	<head>
 		<meta charset="utf-8" />
@@ -304,12 +339,11 @@ Slots podem ser transferidos para outros componentes. Por exemplo, quando criand
 </html>
 ```
 
-```astro {7, 8}
+```astro {6,7}
 // src/layouts/LayoutInicio.astro
 ---
-import LayoutBase from "./LayoutBase.astro";
+import LayoutBase from './LayoutBase.astro';
 ---
-
 <LayoutBase>
   <slot name="cabecalho" slot="cabecalho"/>
   <slot />
@@ -325,9 +359,8 @@ Agora, os slots padrão e `cabecalho` passados para `LayoutInicio` vão ser tran
 ```astro
 // src/pages/index.astro
 ---
-import LayoutInicio from "../layouts/LayoutInicio.astro";
+import LayoutInicio from '../layouts/LayoutInicio.astro';
 ---
-
 <LayoutInicio>
 	<title slot="cabecalho">Astro</title>
 	<h1>Astro</h1>
