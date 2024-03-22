@@ -3,11 +3,10 @@ title: Keystatic & Astro
 description: Add content to your Astro project using Keystatic as a CMS
 type: cms
 service: Keystatic
-i18nReady: false
+i18nReady: true
 ---
-import FileTree from '~/components/FileTree.astro'
+import { FileTree } from '@astrojs/starlight/components';
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import Aside from '~/components/Aside.astro'
 
 [Keystatic](https://keystatic.com/) is an open source, headless content-management system that allows you to structure your content and sync it with GitHub.
 
@@ -37,7 +36,7 @@ Select the Astro template, and you'll be ready to [deploy](#deploying-keystatic-
 
 ## Prerequisites
 
-- An existing Astro project [with server-side rendering (SSR) and `output: 'hybrid'` configured](/en/guides/server-side-rendering/).
+- An existing Astro project [with server-side rendering (SSR) and `output: 'hybrid'` or `output: 'server'` configured](/en/guides/server-side-rendering/).
 
 :::note
 If you intend to sync Keystatic's data with GitHub, you will also need **a GitHub account with `write` permissions** on the repository for this project.
@@ -140,7 +139,7 @@ export default config({
 });
 ```
 
-:::note[already using content collections?]
+:::note[Already using content collections?]
 If you are already using [content collections](/en/guides/content-collections/#defining-collections) in your Astro project, then update the schema above to exactly match the collection(s) defined in your existing schema.
 :::
 

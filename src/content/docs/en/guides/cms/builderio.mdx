@@ -4,10 +4,10 @@ description: Add content to your Astro project using Builder.io’s visual CMS
 type: cms
 service: Builder.io
 stub: false
-i18nReady: false
+i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import FileTree from '~/components/FileTree.astro';
+import { FileTree } from '@astrojs/starlight/components';
 
 [Builder.io](https://www.builder.io/) is a visual CMS that supports drag-and-drop content editing for building websites. 
 
@@ -89,7 +89,7 @@ In your new model use the **+ New Custom Field** button to create 2 new fields:
 
 Then click the **Save** button in the upper right. 
 
-:::caution[slugs]
+:::caution[Slugs]
 There are some pitfalls with the `slug` field:
 
 * Make sure your slug is not just a number. This seems to break the fetch request to Builder's API. 
@@ -224,7 +224,7 @@ Fetching via the content API returns an array of objects containing data for eac
 
 The `posts` array returned from the fetch displays a list of blog post titles on the home page. The individual page routes will be created in the next step.
 
-:::tip[framework integrations]
+:::tip[Framework integrations]
 If you are using a JavaScript framework (e.g. Svelte, Vue, or React) in your Astro project you can use [one of Builder's integrations](https://www.builder.io/m/integrations) as an alternative to making raw fetch calls through the REST API.
 :::
 
@@ -233,7 +233,7 @@ Go to your index route and you should be able to see a list of links each with t
 
 ### Displaying a single blog post
 
-Create the page `src/pages/posts/[slug].astro` that will [dynamically generate a page](/en/core-concepts/routing/#dynamic-routes) for each post.
+Create the page `src/pages/posts/[slug].astro` that will [dynamically generate a page](/en/guides/routing/#dynamic-routes) for each post.
 
 <FileTree title="Project Structure">
 - src/

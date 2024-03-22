@@ -4,6 +4,7 @@ description: How to deploy your Astro site to the web using Cloudflare Pages.
 type: deploy
 i18nReady: true
 ---
+import ReadMore from '~/components/ReadMore.astro'
 
 You can deploy your Astro project on [Cloudflare Pages](https://pages.cloudflare.com/), a platform for frontend developers to collaborate and deploy static (JAMstack) and SSR websites.
 
@@ -127,7 +128,7 @@ There are currently two modes supported when using Pages Functions with the [`@a
 
 To get started, create a `/functions` directory at the root of your project. Writing your Functions files in this directory automatically generates a Worker with custom functionality at the predesignated routes. To learn more about writing Functions, see the [Pages Functions documentation](https://developers.cloudflare.com/pages/platform/functions/).
 
-📚 Read more about [SSR in Astro](/en/guides/server-side-rendering/).
+<ReadMore>Read more about [SSR in Astro](/en/guides/server-side-rendering/).</ReadMore>
 
 ## Troubleshooting
 
@@ -136,3 +137,11 @@ If you're encountering errors, double-check the version of `node` you're using l
 Cloudflare requires [Node v16.13](https://miniflare.dev/get-started/cli#installation), which is a more recent version than Astro’s out-of-the-box minimum, so double check you’re using at least v16.13.
 
 Client-side hydration may fail as a result of Cloudflare's Auto Minify setting. If you see `Hydration completed but contains mismatches` in the console, make sure to disable Auto Minify under Cloudflare settings.
+
+If you are building a project that is using on-demand rendering with [the Cloudflare SSR adapter](/en/guides/integrations-guide/cloudflare/) and the server fails to build with an error message such as `[Error] Could not resolve "XXXX. The package "XXXX" wasn't found on the file system but is built into node.`:
+
+- This means that a package or import you are using in the server-side environment is not compatible with the [Cloudflare Workers runtime APIs](https://developers.cloudflare.com/workers/runtime-apis/nodejs/). 
+
+- If you are directly importing a Node.js runtime API, please refer to the Astro documentation on Cloudflare's [Node.js compatibility](/en/guides/integrations-guide/cloudflare/#nodejs-compatibility) for further steps on how to resolve this.
+
+- If you are importing a package that imports a Node.js runtime API, check with the author of the package to see if they support the `node:*` import syntax. If they do not, you may need to find an alternative package or use a different adapter.

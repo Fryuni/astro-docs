@@ -81,7 +81,8 @@ export default UIDictionary({
 	'integrations.footerTitle': '더 많은 통합',
 	'integrations.renderers': 'UI 프레임워크',
 	'integrations.adapters': 'SSR 어댑터',
-	'integrations.others': '기타',
+	'integrations.others': '기타 통합',
+	'integrations.more': '더 많은 통합',
 	// Checklist component
 	'checklist.or': '또는',
 	// Multiple Choice component
@@ -103,6 +104,9 @@ export default UIDictionary({
 	'feedback.categoryGroupLabel': '어떤 종류의 의견인가요?',
 	'feedback.issue': '문제 보고',
 	'feedback.createIssue': 'GitHub Issue 생성',
+	'feedback.createIssue.description': '우리에게 가장 빨리 문제를 알려줄 수 있어요.',
+	'feedback.sendFeedback': '의견 보내기',
+	'feedback.sendFeedback.description': '우리에게 직접 메시지를 보내요.',
 	'feedback.idea': '새로운 아이디어',
 	'feedback.other': '기타',
 	'feedback.messageA11yLabel': '전달할 생각',
@@ -110,8 +114,6 @@ export default UIDictionary({
 	'feedback.submit': '제출',
 	'feedback.close': '피드백 양식 닫기',
 	'feedback.success': '여러분의 생각을 들려주셔서 감사합니다!',
-	// `<FileTree>` component
-	'fileTree.directoryLabel': '디렉터리',
 	// Code snippet vocabulary
 	'expressiveCode.terminalWindowFallbackTitle': '터미널 창',
 	'expressiveCode.copyButtonTooltip': '클립보드로 복사',
@@ -126,4 +128,9 @@ export default UIDictionary({
 	'stub.description.cms': 'Astro에서 이 CMS를 사용하는 방법에 대해 잘 알고 계신가요?',
 	'stub.description.backend':
 		'Astro에서 이 백엔드 서비스를 사용하는 방법에 대해 더 잘 알고 계신가요?',
+	// Starlight banner
+	'starlight.title': '나만의 문서를 만들고 싶으신가요?',
+	'starlight.description': '시작하려면 이 템플릿을 사용하세요.',
+	// `<StudioHeading>` component
+	'studioHeading.label': 'Studio 기능',
 });

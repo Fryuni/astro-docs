@@ -79,7 +79,8 @@ export default {
 	'integrations.footerTitle': 'More Integrations',
 	'integrations.renderers': 'UI Frameworks',
 	'integrations.adapters': 'SSR Adapters',
-	'integrations.others': 'Others',
+	'integrations.others': 'Other integrations',
+	'integrations.more': 'More integrations',
 	// Checklist component
 	'checklist.or': 'or',
 	// Multiple Choice component
@@ -101,15 +102,16 @@ export default {
 	'feedback.categoryGroupLabel': 'Choose feedback category',
 	'feedback.issue': 'Issue',
 	'feedback.createIssue': 'Create GitHub Issue',
+	'feedback.createIssue.description': 'Quickest way to alert our team of a problem.',
+	'feedback.sendFeedback': 'Send us feedback',
+	'feedback.sendFeedback.description': 'Send us a message directly.',
 	'feedback.idea': 'Idea',
 	'feedback.other': 'Other',
 	'feedback.messageA11yLabel': 'Message',
 	'feedback.placeholder': 'What do you want us to know?',
-	'feedback.submit': 'Send feedback',
+	'feedback.submit': 'Submit feedback',
 	'feedback.close': 'Close feedback form',
 	'feedback.success': 'Thanks! We received your feedback.',
-	// `<FileTree>` component
-	'fileTree.directoryLabel': 'Directory',
 	// Code snippet vocabulary
 	'expressiveCode.terminalWindowFallbackTitle': 'Terminal window',
 	'expressiveCode.copyButtonTooltip': 'Copy to clipboard',
@@ -123,4 +125,9 @@ export default {
 		'Want to contribute to this guide? Have a blog post, video, or another resource to share about migrating from this technology to Astro?',
 	'stub.description.cms': 'Know more about how to use this CMS with Astro?',
 	'stub.description.backend': 'Know more about how to use this backend service with Astro?',
+	// Starlight banner
+	'starlight.title': 'Want to build your own Docs?',
+	'starlight.description': 'Grab this template to get started.',
+	// `<StudioHeading>` component
+	'studioHeading.label': 'Studio feature',
 };

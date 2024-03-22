@@ -4,21 +4,25 @@ description: NetlifyでAstroサイトをウェブにデプロイする方法。
 type: deploy
 i18nReady: true
 ---
+import ReadMore from '~/components/ReadMore.astro'
+
 [Netlify](https://netlify.com)は、ウェブアプリケーションや静的ウェブサイトのためのホスティングとサーバーレスバックエンドサービスを提供しています。Astroサイトは全てNetlifyでホストできます！
 
 このガイドは、NetlifyのウェブサイトUIまたはNetlifyのCLIを介してデプロイするための手順を説明しています。
 
 ## プロジェクトの設定
 
-Astroプロジェクトは、静的サイト、サーバーレンダリングサイト、(実験的な)エッジレンダリングサイトの3つの異なる方法でNetlifyにデプロイできます。
+Astroプロジェクトは、静的サイト、サーバーレンダリングサイト、エッジレンダリングサイトの3つの異なる方法でNetlifyにデプロイできます。
 
 ### 静的サイト
 
 Astroプロジェクトは、デフォルトでは静的サイトです。Netlifyに静的Astroサイトをデプロイするために、特に追加の設定は必要ありません。
 
-### SSR/Edge用のアダプターを追加する
+### SSR用のアダプターを追加する
 
-AstroプロジェクトでSSRを有効にし、Netlifyにデプロイするには、以下の`astro add`コマンドで[Netlifyアダプター](/ja/guides/integrations-guide/netlify/)を追加します。これにより、アダプターがインストールされ、`astro.config.mjs`ファイルが1つのステップで適切に変更されます。
+AstroプロジェクトでSSRを有効にし、NetlifyのEdge Functionsを使用してNetlifyにデプロイするには:
+
+以下の`astro add`コマンドで[Netlifyアダプター](/ja/guides/integrations-guide/netlify/)を追加し、AstroプロジェクトでSSRを有効にします。これによりアダプターがインストールされ、`astro.config.mjs`ファイルに適切な変更が1ステップで行われます。
 
 ```bash
 npx astro add netlify
@@ -26,17 +30,17 @@ npx astro add netlify
 
 アダプターを手動でインストールする場合は、以下の2つのステップを実行してください。
 
-1. [`@astrojs/netlify`アダプター](https://github.com/withastro/astro/tree/main/packages/integrations/netlify)を、パッケージマネージャーを使ってプロジェクトの依存関係にインストールします。npmをパッケージマネージャーとして使用しているかどうかわからない場合は、ターミナルで以下のコマンドを実行します。
+1. [`@astrojs/netlify`アダプター](/ja/guides/integrations-guide/netlify/)を、パッケージマネージャーを使ってプロジェクトの依存関係にインストールします。npmをパッケージマネージャーとして使用しているかどうかわからない場合は、ターミナルで以下のコマンドを実行します。
 
     ```bash
-      npm install @astrojs/netlify
+    npm install @astrojs/netlify
     ```
 
 1. `astro.config.mjs`プロジェクト設定ファイルに新しく以下の2行を追加します。
 
     ```js title="astro.config.mjs" ins={2, 5-6}
     import { defineConfig } from 'astro/config';
-    import netlify from '@astrojs/netlify/functions';
+    import netlify from '@astrojs/netlify';
 
     export default defineConfig({
       output: 'server',
@@ -44,15 +48,18 @@ npx astro add netlify
     });
     ```
 
-    [Netlifyの実験的Edge Functions](https://docs.netlify.com/netlify-labs/experimental-features/edge-functions/#app)を使ってプロジェクトをレンダリングするには、Astro設定ファイルの`netlify/functions`インポートを`netlify/edge-functions`に変更します。
-      ```js title="astro.config.mjs" ins={3} del={2}
+    Netlifyアダプターの設定に`edgeMiddleware: true`を追加することで、NetlifyのEdge Functionsを使用してプロジェクトをデプロイすることもできます。
+
+      ```diff lang="js"
+      // astro.config.mjs
       import { defineConfig } from 'astro/config';
       import netlify from '@astrojs/netlify/functions';
-      import netlify from '@astrojs/netlify/edge-functions';
 
       export default defineConfig({
         output: 'server',
-        adapter: netlify(),
+        adapter: netlify({
+    +     edgeMiddleware: true
+        }),
       });
       ```
 
@@ -91,7 +98,7 @@ GitHub、GitLab、BitBucket、またはAzure DevOpsにプロジェクトがあ�
   publish = "dist"
 ```
 
-📚 さらに詳しい情報は、Netlifyのブログの["既存のAstroのGitリポジトリをデプロイ"](https://www.netlify.com/blog/how-to-deploy-astro/#deploy-an-existing-git-repository-to-netlify)を参照してください。
+<ReadMore>さらに詳しい情報は、Netlifyのブログの["既存のAstroのGitリポジトリをデプロイ"](https://www.netlify.com/blog/how-to-deploy-astro/#deploy-an-existing-git-repository-to-netlify)を参照してください。</ReadMore>
 
 
 ### CLIを使ったデプロイ方法
@@ -115,7 +122,7 @@ GitHub、GitLab、BitBucket、またはAzure DevOpsにプロジェクトがあ�
 
     CLIはリポジトリにデプロイキーを追加します。そのため、`git push`するたびにNetlifyでサイトが自動で再ビルドされます。
 
-📚 さらに詳しい情報は、Netlifyのブログの[Netlify CLIを使ったAstroサイトのデプロイ](https://www.netlify.com/blog/how-to-deploy-astro/#link-your-astro-project-and-deploy-using-the-netlify-cli)を参照してください。
+<ReadMore>さらに詳しい情報は、Netlifyのブログの[Netlify CLIを使ったAstroサイトのデプロイ](https://www.netlify.com/blog/how-to-deploy-astro/#link-your-astro-project-and-deploy-using-the-netlify-cli)を参照してください。</ReadMore>
 
 ### Node.jsバージョンの設定
 

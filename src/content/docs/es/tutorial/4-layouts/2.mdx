@@ -81,7 +81,7 @@ Published on: 2022-07-01
 const { frontmatter } = Astro.props;
 ---
 <h1>{frontmatter.title}</h1>
-<p>Publicado el: {frontmatter.pubDate.slice(0,10)}</p>
+<p>Publicado el: {frontmatter.pubDate.toString().slice(0,10)}</p>
 <p>Escrito por {frontmatter.author}</p>
 <slot />
 ```
@@ -95,7 +95,7 @@ Este es un ejemplo de un plantilla refactorizada que deja sólo el contenido ind
 const { frontmatter } = Astro.props;
 ---
 <h1> {frontmatter.title}</h1>
-<p>{frontmatter.pubDate.slice(0,10)}</p>
+<p>{frontmatter.pubDate.toString().slice(0,10)}</p>
 <p><em>{frontmatter.description}</em></p>
 <p>Escrito por: {frontmatter.author}</p>
 <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
@@ -103,7 +103,7 @@ const { frontmatter } = Astro.props;
 ```
 </Box>
 
-:::note[evitar duplicados]
+:::note[Evitar duplicados]
  Todo lo que se muestre en la plantilla **no** tiene que escribirse en la publicación del blog. Si observas alguna duplicación al comprobar la vista previa de tu navegador, asegúrate de eliminar el contenido de tu archivo Markdown.
  :::
 
@@ -176,6 +176,6 @@ const { frontmatter } = Astro.props;
 
 - [Plantillas de Markdown en Astro](/es/guides/markdown-content/#layout-en-el-frontmatter)
 
-- [Props de plantilla para Markdown](/es/core-concepts/layouts/#props-de-plantillas-markdown)
+- [Props de plantilla para Markdown](/es/basics/layouts/#props-de-plantillas-markdown)
 
 - [Introduccion a YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f) <Badge>externo</Badge>

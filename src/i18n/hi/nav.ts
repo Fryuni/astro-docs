@@ -4,9 +4,9 @@ export default NavDictionary({
 	startHere: 'यहाँ से शुरू करे',
 	'getting-started': 'पहले कदम',
 
-	install: 'स्थापित करें',
+	install: 'इंस्टॉल करें',
 	'editor-setup': 'एडिटर सेटअप',
-	'guides/upgrade-to/v3': 'v3 में अपग्रेड करें',
+	'guides/upgrade-to/v4': 'v4 में अपग्रेड करें',
 
 	coreConcepts: 'मूल अवधारणाएँ',
 	'concepts/why-astro': 'क्यों Astro',
@@ -18,12 +18,12 @@ export default NavDictionary({
 	'add-transitions-tutorial': 'व्यू-ट्रांज़िशन्स बढ़ाएं',
 
 	basics: 'मौलिक अवधारणाएँ',
-	'core-concepts/project-structure': 'परियोजना संरचना',
-	'core-concepts/astro-components': 'अवयव',
-	'core-concepts/astro-pages': 'पृष्ठ',
-	'core-concepts/layouts': 'नक़्शे',
-	'core-concepts/astro-syntax': 'Astro की सिंटैक्स',
-	'core-concepts/rendering-modes': 'अनुवाद मध्यम',
+	'basics/project-structure': 'परियोजना संरचना',
+	'basics/astro-components': 'अवयव',
+	'basics/astro-pages': 'पेज',
+	'basics/layouts': 'नक़्शे',
+	'basics/astro-syntax': 'Astro की सिंटैक्स',
+	'basics/rendering-modes': 'अनुवाद मध्यम',
 
 	builtins: 'बिल्ट-इंस ',
 	'guides/content-collections': 'सामग्री संग्रह',
@@ -32,7 +32,7 @@ export default NavDictionary({
 
 	addons: 'एड-ऑन्स',
 	'guides/integrations-guide': 'एकीकरण जानकारी',
-	'core-concepts/framework-components': 'UI फ़्रेमवर्क्स',
+	'guides/framework-components': 'UI फ़्रेमवर्क्स',
 	'guides/server-side-rendering': 'सर्वर-साइड रेंडरिंग (SSR)',
 
 	examples: 'उदाहरण',
@@ -43,14 +43,14 @@ export default NavDictionary({
 	'guides/recipes': 'अधिक रेसिपी',
 
 	features: 'गाइड्स',
-	'core-concepts/routing': 'रूटिंग',
+	'guides/routing': 'रूटिंग',
 	'guides/markdown-content': 'Markdown और MDX',
 	'guides/client-side-scripts': 'स्क्रिप्ट और घटना संचालन',
 	'guides/styling': 'स्टाइल और CSS',
 	'guides/images': 'छवियाँ',
 	'guides/fonts': 'फ़ॉन्ट्स',
 	'guides/imports': 'आयात',
-	'core-concepts/endpoints': 'एंडपॉइंट्स',
+	'guides/endpoints': 'एंडपॉइंट्स',
 	'guides/data-fetching': 'डेटा फ़ेचिंग',
 	'guides/internationalization': 'अंतर्राष्ट्रीयकरण',
 	'guides/middleware': 'मिडलवेयर',
@@ -69,9 +69,13 @@ export default NavDictionary({
 	'reference/integrations-reference': 'एकीकरण API',
 	'reference/adapter-reference': 'एडाप्टर API',
 	'reference/image-service-reference': 'छवि सेवा API',
-	'reference/dev-overlay-plugin-reference': 'डेवलपर ओवरले प्लगइन API',
+	'reference/dev-toolbar-app-reference': 'डेवलपर टूलबार ऍप API',
 	'reference/directives-reference': 'टेम्पलेट निर्देशिकाएँ',
 	'reference/cli-reference': 'Astro CLI',
 	'reference/error-reference': 'त्रुटि संदर्भ',
 	'guides/publish-to-npm': 'NPM पैकेज प्रारूप',
+
+	communityResources: 'सामूहिक संसाधन',
+	'community-resources/content': 'पाठ्यक्रम, मार्गदर्शिकाएँ और रेसिपी',
+	'community-resources/talks': 'वार्ता, इंटरव्यू, और स्ट्रीमस',
 });

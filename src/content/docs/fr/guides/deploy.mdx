@@ -3,10 +3,13 @@ title: Déployer votre Site Astro
 description: Comment déployer votre site Astro sur le web.
 i18nReady: true
 ---
+
 import DeployGuidesNav from '~/components/DeployGuidesNav.astro';
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
 
 **Prêt à construire et déployer votre site Astro ?** Suivez un de nos guides sur différents services de déploiement, ou scrollez plus bas pour avoir des orientations générales sur comment déployer un site Astro.
+
+## Guide de déploiement
 
 <DeployGuidesNav />
 
@@ -22,7 +25,7 @@ Ces hébergeurs détectent automatiquement les push sur le dépôt de votre proj
 
 1. Ajoutez votre dépôt à un provider Git (ex. sur GitHub, GitLab, Bitbucket)
 
-1. Choisissez un hébergeur qui supporte le *déploiement continu* (ex. [Netlify](/fr/guides/deploy/netlify/) ou [Vercel](/fr/guides/deploy/vercel/)) et importez votre dépôt Git en tant que nouveau projet / site.
+2. Choisissez un hébergeur qui supporte le *déploiement continu* (ex. [Netlify](/fr/guides/deploy/netlify/) ou [Vercel](/fr/guides/deploy/vercel/)) et importez votre dépôt Git en tant que nouveau projet / site.
 
     De nombreux hébergeurs vont reconnaître votre projet en tant que site Astro, et devraient automatiquement appliquer la configuration appropriée pour construire et déployer votre site comme montré ci-dessous. (Dans le cas contraire, ces paramètres peuvent être modifiés.)
 
@@ -31,7 +34,7 @@ Ces hébergeurs détectent automatiquement les push sur le dépôt de votre proj
     - **Dossier de publication:** `dist`
     :::
 
-1. Cliquez sur "Déployer" et votre nouveau site internet sera créé avec une URL unique (ex. `new-astro-site.netlify.app`).
+3. Cliquez sur "Déployer" et votre nouveau site internet sera créé avec une URL unique (ex. `new-astro-site.netlify.app`).
 
 
 L'hébergeur va automatiquement inspecter votre branche main de votre dépôt, et dès que des changements seront détectés, va reconstruire et republier votre site. Ces paramètres peuvent typiquement être modifiés dans l'interface de votre hébergeur.
@@ -83,22 +86,22 @@ Vous pouvez aussi vouloir construire votre site localement pour le prévisualise
 Exécutez la commande `npm run build` pour construire votre site Astro.
 
 <PackageManagerTabs>
-    <Fragment slot="npm">
-    ```shell
-    npm run build
-    ```
-    </Fragment>
-    <Fragment slot="pnpm">
-    ```shell
-    pnpm run build
-    ```
-    </Fragment>
-    <Fragment slot="yarn">
-    ```shell
-    yarn run build
-    ```
-    </Fragment>
-</PackageManagerTabs>
+      <Fragment slot="npm">
+      ```shell
+      npm run build
+      ```
+      </Fragment>
+      <Fragment slot="pnpm">
+      ```shell
+      pnpm run build
+      ```
+      </Fragment>
+      <Fragment slot="yarn">
+      ```shell
+      yarn run build
+      ```
+      </Fragment>
+  </PackageManagerTabs>
 
 Par défaut, le dossier de build sera placé à `dist/`. Ce dossier peut être changé en utilisant [l'option `outDir`](/fr/reference/configuration-reference/#outdir).
 

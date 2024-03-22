@@ -4,7 +4,7 @@ description: 如何使用 GitLab Pages 将你的 Astro 网站部署到网络上�
 i18nReady: true
 ---
 
-你可以使用 [GitLab Pages](https://pages.gitlab.io/) 为你的 [GitLab](https://about.gitlab.com/) 项目、组或用户账户托管 Astro 网站。
+你可以使用 [GitLab Pages](https://pages.gitlab.io/) 为你的 [GitLab](https://about.gitlab.com/) 项目、组或用户账号托管 Astro 网站。
 
 :::tip[正在寻找示例？]
 看一看 [GitLab Pages 官方的 Astro 示例项目](https://gitlab.com/pages/astro)!
@@ -16,7 +16,7 @@ i18nReady: true
 2. 将 `public/` 文件夹重命名为 `static`。
 3. 在 `astro.config.mjs` 文件中设置 `outDir:public`。这会告诉 Astro 将静态构建输出放在 `public` 目录下，该目录是 GitLab Pages 指定的静态资源存放位置。
 
-   如果你在 Astro 项目中使用 [`public/` 目录](/zh-cn/core-concepts/project-structure/#public) 存放静态资源，你需要重命名该目录，并在 `astro.config.mjs` 文件中将 `publicDir` 的值改为新的目录名。
+   如果你在 Astro 项目中使用 [`public/` 目录](/zh-cn/basics/project-structure/#public) 存放静态资源，你需要重命名该目录，并在 `astro.config.mjs` 文件中将 `publicDir` 的值改为新的目录名。
 
    例如，当 `public/` 目录被重命名为 `static/`，正确的 `astro.config.mjs` 文件设置则如下：
 
@@ -25,7 +25,7 @@ i18nReady: true
    
    export default defineConfig({
      site: 'https://<user>.gitlab.io',
-     base: '/<project-name>'
+     base: '/<project-name>',
      outDir: 'public',
      publicDir: 'static',
    });

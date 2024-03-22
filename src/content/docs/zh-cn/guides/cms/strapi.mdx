@@ -7,7 +7,7 @@ stub: false
 i18nReady: true
 ---
 
-import FileTree from '~/components/FileTree.astro';
+import { FileTree } from '@astrojs/starlight/components';
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro';
 
 [Strapi](https://strapi.io/) 是一个开源的、可定制化的无头 CMS。
@@ -31,10 +31,9 @@ import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro';
 STRAPI_URL="http://127.0.0.1:1337" // 或者使用你的 IP 地址
 ```
 
-现在，你可以在你的 Astro 项目中使用这个环境变量了。
+重启开发服务器以在你的 Astro 项目中使用这个环境变量。
 
 如果你希望为环境变量使用 IntelliSense，可以在 `src/` 目录下创建一个 `env.d.ts` 文件，并像这样配置 `ImportMetaEnv`：
-
 ```ts title="src/env.d.ts"
 interface ImportMetaEnv {
   readonly STRAPI_URL: string;
@@ -172,11 +171,16 @@ export default interface Article {
       attributes: {
         title: "What's inside a Black Hole",
         description: 'Maybe the answer is in this article, or not...',
+        description: "Maybe the answer is in this article, or not...",
         content: "Well, we don't know yet...",
         slug: 'what-s-inside-a-black-hole',
         createdAt: '2023-05-28T13:19:46.421Z',
         updatedAt: '2023-05-28T13:19:46.421Z',
         publishedAt: '2023-05-28T13:19:45.826Z'
+        slug: "what-s-inside-a-black-hole",
+        createdAt: "2023-05-28T13:19:46.421Z",
+        updatedAt: "2023-05-28T13:19:46.421Z",
+        publishedAt: "2023-05-28T13:19:45.826Z"
       }
     },
     // ...
@@ -207,9 +211,11 @@ export default interface Article {
         <ul>
           {
             articles.map((article) => (
-              <a href={`/blog/${article.attributes.slug}/`}>
-                {article.attributes.title}
-              </a>
+              <li>
+                <a href={`/blog/${article.attributes.slug}/`}>
+                  {article.attributes.title}
+                </a>
+              </li>
             ))
           }
         </ul>
@@ -220,7 +226,7 @@ export default interface Article {
 
 ### 生成文章页面
 
-创建文件 `src/pages/blog/[slug].astro` 来[为每篇文章动态生成页面](/zh-cn/core-concepts/routing/#动态路由)。
+创建文件 `src/pages/blog/[slug].astro` 来[为每篇文章动态生成页面](/zh-cn/guides/routing/#动态路由)。
 
 <FileTree title="Project Structure">
   - src/
@@ -319,7 +325,7 @@ const article = Astro.props;
 
 #### 服务器端渲染
 
-如果你选择了 [SSR 模式](/zh-cn/guides/server-side-rendering/) 并设置了 `output: server` 或 `output: hybrid`，那么可以使用以下代码来生成你的[动态路由](/zh-cn/core-concepts/routing/#服务器ssr模式)。
+如果你选择了 [SSR 模式](/zh-cn/guides/server-side-rendering/) 并设置了 `output: server` 或 `output: hybrid`，那么可以使用以下代码来生成你的[动态路由](/zh-cn/guides/routing/#服务器ssr模式)。
 
 创建 `src/pages/blog/[slug].astro` 文件：
 

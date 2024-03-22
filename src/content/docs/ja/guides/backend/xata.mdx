@@ -7,7 +7,7 @@ stub: false
 i18nReady: true
 ---
 import PackageManagerTabs from '~/components/tabs/PackageManagerTabs.astro'
-import FileTree from '~/components/FileTree.astro'
+import { FileTree } from '@astrojs/starlight/components';
 
 [Xata](https://xata.io)は、リレーショナルデータベース、検索エンジン、分析エンジンの機能を組み合わせた**サーバーレスデータプラットフォーム**で、一貫したREST APIを公開します。
 
@@ -92,14 +92,14 @@ const { records } = await xata.db.Posts.getPaginated({
 ---
 
 <ul>
-  {records.map(post) => (
+  {records.map((post) => (
     <li>{post.title}</li>
-  )}
+  ))}
 </ul>
 ```
 スキーマが変更されるたびにSDKを再生成する必要があります。Xata CLIが作成する生成ファイルを変更しないでください。スキーマが更新されると、変更内容が上書きされるためです。
 
 
 ## 公式リソース
-- [Xata Astro Starter](https://github.com/xataio/examples/tree/main/apps/starter-astro)
+- [Xata Astro Starter](https://github.com/xataio/examples/tree/main/apps/getting-started-astro)
 - [Xata Docs: Quick Start Guide](https://xata.io/docs/getting-started/quickstart-astro)

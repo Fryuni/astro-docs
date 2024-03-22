@@ -22,13 +22,13 @@ Astroはどのようなコードエディタでも動作しますが、VS Code�
 早速、[Astro VS Code拡張機能](https://marketplace.visualstudio.com/items?itemName=astro-build.astro-vscode)をインストールしてみましょう。
 
 
-📚 Astroプロジェクトでどのように[TypeScriptをセットアップ](/ja/guides/typescript/)するのか見る。
+import ReadMore from '~/components/ReadMore.astro';
+
+<ReadMore>Astroプロジェクトでどのように[TypeScriptをセットアップ](/ja/guides/typescript/)するのか見る。</ReadMore>
 
 ### JetBrainsのIDE
 
 WebStorm 2023.1にAstroの初期サポートが追加されました。[JetBrains Marketplace](https://plugins.jetbrains.com/plugin/20959-astro)か、IDEのプラグインタブで「Astro」と検索して公式のプラグインをインストールできます。このプラグインにはシンタックスハイライト、コード補完、フォーマットなどの機能が含まれており、今後はさらに高度な機能が追加される予定です。他のすべての[JavaScriptをサポートしているJetBrainsのIDE](https://www.jetbrains.com/products/#lang=js&type=ide)でも利用可能です。
-
-JetBrainsの次期IDEである[Fleet](https://www.jetbrains.com/fleet/)は言語サーバーをサポートしているため、公式のAstroツールを利用できるようになります。
 
 ## その他のコードエディタ
 
@@ -38,6 +38,8 @@ JetBrainsの次期IDEである[Fleet](https://www.jetbrains.com/fleet/)は言語
 - [Nova Extension](https://extensions.panic.com/extensions/sciencefidelity/sciencefidelity.astro/)<span style="margin: 0.25em;"><Badge variant="neutral">Community</Badge></span> - Nova向けにAstro用シンタックスハイライトや自動補完を提供します。
 - [Vim Plugin](https://github.com/wuelnerdotexe/vim-astro) <span style="margin: 0.25em;"><Badge variant="neutral">Community</Badge></span> - VimとNeovim向けにAstro用シンタックスハイライトやインデント、コードの折りたたみを提供します。
 - Neovim [LSP](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#astro)と[TreeSitter](https://github.com/virchau13/tree-sitter-astro) Plugins <span style="margin: 0.25em;"><Badge variant="neutral">Community</Badge></span> - Neovim向けにAstro用シンタックスハイライトやtreesitterパース、自動補完を提供します。
+- Emacs - Astroと連携するための[EmacsとEglotの設定](https://medium.com/@jrmjrm/configuring-emacs-and-eglot-to-work-with-astro-language-server-9408eb709ab0)<span style="margin: 0.25em;"><Badge variant="neutral">Community</Badge></span>の説明を参照してください。
+- [Astro syntax highlighting for Sublime Text](https://packagecontrol.io/packages/Astro) <span style="margin: 0.25em;"><Badge variant="neutral">Community</Badge></span> - Sublime Text用のAstroパッケージで、Sublime Textパッケージマネージャーから利用できます。
 
 ## ブラウザ内エディタ
 
@@ -77,7 +79,7 @@ JetBrainsの次期IDEである[Fleet](https://www.jetbrains.com/fleet/)は言語
   </Fragment>
   <Fragment slot="pnpm">
   ```shell
-  pnpm install -D prettier prettier-plugin-astro
+  pnpm add -D prettier prettier-plugin-astro
   ```
   </Fragment>
   <Fragment slot="yarn">

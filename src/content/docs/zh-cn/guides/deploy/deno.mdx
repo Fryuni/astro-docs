@@ -4,6 +4,7 @@ description: 如何将你的 Astro 网站通过 Deno 部署上线
 type: deploy
 i18nReady: true
 ---
+import ReadMore from '~/components/ReadMore.astro'
 
 你可以将一个使用服务器端渲染的 Astro 网站部署到 Deno Deploy，它是一个在全球范围边的边缘服务上运行 JavaScript、TypeScript 和 WebAssembly 的分布式系统。
 
@@ -11,11 +12,13 @@ i18nReady: true
 
 ## 要求
 
-本指南假设你已经安装了 [Deno](https://deno.land/)。
+本指南假设你已经安装了 [Deno](https://deno.com/)。
 
 ## 项目配置
 
-你的 Astro 项目可以作为服务器端渲染站点（SSR）部署到 Deno Deploy。注意，Deno Deploy 不支持静态站点。
+本页面提供了将你的 Astro 项目作为服务端渲染（SSR）站点部署到 [Deno Deploy](https://deno.com/deploy) 的指南。
+
+要部署静态站点，请参阅 [Deno 部署静态站点教程](https://docs.deno.com/deploy/tutorials/static-site)。
 
 ### SSR 适配器
 
@@ -68,7 +71,7 @@ npx astro add deno
     npm run preview
     ```
 
-## 如何部署
+## 如何部署 SSR Astro 站点
 
 你可以通过 GitHub Actions 或使用 Deno Deploy 的命令行界面（CLI）将项目部署到 Deno Deploy。
 
@@ -78,7 +81,7 @@ npx astro add deno
 
 1. 将你的代码推送到公开或私有的 GitHub 存储仓库。
 
-2. 使用你的 GitHub 账户登录 [Deno Deploy](https://dash.deno.com/)，然后单击 [New Project](https://dash.deno.com)。
+2. 使用你的 GitHub 账号登录 [Deno Deploy](https://dash.deno.com/)，然后单击 [New Project](https://dash.deno.com)。
 
 3. 选择你的存储仓库和要部署的分支，并选择 **GitHub Action** 模式。（你的 Astro 站点需要一个构建步骤，不能使用 Automatic 模式。）
 
@@ -98,7 +101,7 @@ npx astro add deno
 
         steps:
           - name: Clone repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
 
           # 没有使用 npm？请将 `npm ci` 修改为 `yarn install` 或 `pnpm i`
           - name: Install dependencies
@@ -122,7 +125,7 @@ npx astro add deno
 
 ### 使用 CLI 进行部署
 
-1. 安装 [Deno Deploy CLI](https://deno.com/deploy/docs/deployctl)。
+1. 安装 [Deno Deploy CLI](https://docs.deno.com/deploy/manual/deployctl)。
 
     ```bash
     deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no-check -r -f https://deno.land/x/deploy/deployctl.ts
@@ -136,7 +139,7 @@ npx astro add deno
 
 3. 运行 `deployctl` 进行部署！
 
-   在下面的命令中，将 `<ACCESS-TOKEN>` 替换为你的 [个人访问令牌](https://dash.deno.com/user/access-tokens)，将 `<MY-DENO-PROJECT>` 替换为你的 Deno Deploy 项目名称。
+   在下面的命令中，将 `<ACCESS-TOKEN>` 替换为你的 [个人访问令牌](https://dash.deno.com/account#access-tokens)，将 `<MY-DENO-PROJECT>` 替换为你的 Deno Deploy 项目名称。
 
     ```bash
     DENO_DEPLOY_TOKEN=<ACCESS-TOKEN> deployctl deploy --project=<MY-DENO-PROJECT> --no-static --include=./dist ./dist/server/entry.mjs
@@ -166,6 +169,6 @@ npx astro add deno
     DENO_DEPLOY_TOKEN=<ACCESS-TOKEN> npm run deno-deploy
     ```
 
-📚 了解更多关于 [Astro 中的 SSR](/zh-cn/guides/server-side-rendering/) 的内容。
+<ReadMore>了解更多关于 [Astro 中的 SSR](/zh-cn/guides/server-side-rendering/) 的内容。</ReadMore>
 
 [Deno adapter]: https://github.com/denoland/deno-astro-adapter

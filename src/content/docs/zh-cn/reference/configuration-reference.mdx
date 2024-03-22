@@ -20,13 +20,210 @@ export default defineConfig({
 
 ## 顶层选项
 
-### root
+### site
 
 <p>
 
+**类型**：`string`
+</p>
+
+你最终部署的链接。Astro 会使用这个完整的链接来生成网站地图和最终构建的规范链接。强烈建议你设置这个配置项，以获得 Astro 最佳体验。
+
+```js
+{
+  site: 'https://www.my-site.dev'
+}
+```
+
+
+### base
+
+<p>
+
+**类型**：`string`
+</p>
+
+你要部署到的基本路径。Astro 在开发过程中会匹配这个路径名，这样你的开发环境就会尽可能地与你的构建环境匹配。在下面的例子中，`astro dev` 会在 `/docs` 处启动你的服务器。
+
+```js
+{
+  base: '/docs'
+}
+```
+
+当使用这个选项时，你所有的静态资源导入和 URL 都需要添加 base 作为前缀。你可以通过 `import.meta.env.BASE_URL` 访问这个值。
+
+`import.meta.env.BASE_URL` 的值将由你的 `trailingSlash` 配置所决定，无论你为 `base` 设置了什么值。
+
+如果设置了 `trailingSlash: "always"`，则始终包含尾部斜杠。如果设置了 `trailingSlash: "never"`，即使 `base` 包含斜杠，`BASE_URL` 也不会包含尾部斜杠。
+
+此外，Astro 在将 `config.base` 的配置值提供给集成之前会进行内部操作。由集成读取的 `config.base` 值也同样由你的 `trailingSlash` 配置决定。
+
+在下面的示例中，在处理时 `import.meta.env.BASE_URL` 和 `config.base` 的值都将是 `/docs`：
+```js
+{
+	 base: '/docs/',
+	 trailingSlash: "never"
+}
+```
+
+在下面的示例中，在处理时 `import.meta.env.BASE_URL` 和 `config.base` 的值都将是 `/docs/`：
+
+```js
+{
+	 base: '/docs',
+	 trailingSlash: "always"
+}
+```
+
+### trailingSlash
+
+<p>
+
+**类型**：`'always' | 'never' | 'ignore'`<br />
+**默认值**：`'ignore'`
+</p>
+
+设置开发服务器的路由匹配行为。从以下选项中选择：
+
+- `'always'` - 只匹配包含尾部斜线的链接（例如：`/foo/`）。
+- `'never'` - 不匹配包含尾部斜线的链接（例如：`/foo`）。
+- `'ignore'`- 匹配链接，不管是否存在尾部的 `/`。
+
+如果你的生产主机对尾部斜杠的工作或不工作有严格的处理方式，请使用该配置选项。
+
+如果你希望自己更严格一些，那么你也可以设置这个选项，这样在开发过程中，无论是否有尾部斜杠的 URL 都不会工作。
+
+```js
+{
+  // 示例：在开发过程中要求有尾部斜线
+  trailingSlash: 'always'
+}
+```
+
+**另见**：
+
+- build.format
+
+
+### redirects
+
+<p>
+
+**类型：** `Record.<string, RedirectConfig>`<br />
+**默认值：** `{}`<br />
+<Since v="2.9.0" />
+</p>
+
+指定重定向的映射关系。其中键为要匹配的路由，值为重定向的路径。
+
+你可以重定向静态和动态路由，但只能重定向到相同类型的路由。例如，你不能有一个 `'/article': '/blog/[...slug]'` 的重定向。
+
+
+```js
+{
+  redirects: {
+    '/old': '/new',
+    '/blog/[...slug]': '/articles/[...slug]',
+  }
+}
+```
+
+对于未安装适配器的静态生成站点，这将生成一个使用 [`<meta http-equiv="refresh">` 标签](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#http-equiv) 的客户端重定向，并且不支持状态码。
+
+而使用 SSR 或以 `output: static` 模式使用静态适配器时，则支持状态码。
+
+默认情况下，Astro 将以 `301` 的状态对重定向的 GET 请求进行处理，并对其他请求方法使用 `308` 的状态。
+
+你可以使用重定向配置中的对象自定义 [重定向状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#redirection_messages)：
+
+
+```js
+{
+  redirects: {
+    '/other': {
+      status: 302,
+      destination: '/place',
+    },
+  }
+}
+```
+
+
+### output
+
+<p>
+
+**类型**：`'static' | 'server' | 'hybrid'`<br />
+**默认值**：`'static'`
+</p>
+
+指定构建的输出目标。
+
+- `static`- 构建静态网站，部署到任何静态托管服务器上；
+- `server` - 构建应用，部署到支持 SSR（服务器端渲染）的托管服务器上；
+- `hybrid` - 构建包含少量服务端渲染页面的静态网站。
+
+```js
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  output: 'static'
+})
+```
+
+**另见**：
+
+- adapter
+
+### adapter
+
+<p>
+
+**类型**：`AstroIntegration`
+</p>
+
+使用构建适配器将其部署到你最喜爱的服务器、无服务器或边缘主机。导入我们的第一方适配器 [Netlify](/zh-cn/guides/deploy/netlify/#ssr-适配器)、[Vercel](/zh-cn/guides/deploy/vercel/#ssr-适配器)，以及更多的适配器来使用 Astro SSR。
+
+[有关 SSR 的更多信息，请参见我们的服务器端渲染指南](/zh-cn/guides/server-side-rendering/)，以及[我们的部署指南](/zh-cn/guides/deploy/)以获得完整的主机列表。
+
+```js
+import netlify from '@astrojs/netlify';
+{
+  // 示例：使用 Netlify 无服务器部署构建
+  adapter: netlify(),
+}
+```
+
+**另见**：
+
+- output
+
+### integrations
+
+<p>
+**类型：** `AstroIntegration[]`
+</p>
+
+用自定义集成来扩展 Astro 功能。你可以用集成来添加框架支持（如 Solid.js）、新功能（如站点地图）和新库支持（如 Partytown）。
+
+请阅读我们的[集成指南](/zh-cn/guides/integrations-guide/)，以帮助开始使用 Astro 集成。
+
+```js
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+{
+  // 示例：添加 React + Tailwind 支持
+  integrations: [react(), tailwind()]
+}
+```
+
+### root
+
+<p>
 **类型**：`string`<br />
 **CLI**：`--root`<br />
-**默认值**：`"."` (current working directory)
+**默认值**：`"."` (当前工作文件夹)
 </p>
 
 只有当你在项目根目录以外的目录下运行 `astro` CLI 命令时，你才应该提供该选项。通常，这个选项是通过 CLI 而不是 [Astro 配置文件](/zh-cn/guides/configuring-astro/#受支持的配置文件类型)提供的，因为 Astro 需要知道项目根目录才能找到配置文件。
@@ -120,64 +317,6 @@ $ astro build --root ./my-project-directory
 }
 ```
 
-### redirects
-
-<p>
-
-**类型：** `Record.<string, RedirectConfig>`<br />
-**默认值：** `{}`<br />
-<Since v="2.9.0" />
-</p>
-
-指定重定向的映射关系。其中键为要匹配的路由，值为重定向的路径。
-
-你可以重定向静态和动态路由，但只能重定向到相同类型的路由。例如，你不能有一个 `'/article': '/blog/[...slug]'` 的重定向。
-
-
-```js
-{
-  redirects: {
-    '/old': '/new',
-    '/blog/[...slug]': '/articles/[...slug]',
-  }
-}
-```
-
-对于未安装适配器的静态生成站点，这将生成一个使用 [`<meta http-equiv="refresh">` 标签](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#http-equiv) 的客户端重定向，并且不支持状态码。
-
-而使用 SSR 或以 `output: static` 模式使用静态适配器时，则支持状态码。
-
-默认情况下，Astro 将以 `301` 的状态对重定向的 GET 请求进行处理，并对其他请求方法使用 `308` 的状态。
-
-你可以使用重定向配置中的对象自定义 [重定向状态码](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status#redirection_messages)：
-
-
-```js
-{
-  redirects: {
-    '/other': {
-      status: 302,
-      destination: '/place',
-    },
-  }
-}
-```
-
-### site
-
-<p>
-
-**类型**：`string`
-</p>
-
-你最终部署的链接。Astro 会使用这个完整的链接来生成网站地图和最终构建的规范链接。强烈建议你设置这个配置项，以获得 Astro 最佳体验。
-
-```js
-{
-  site: 'https://www.my-site.dev'
-}
-```
-
 ### compressHTML
 
 <p>
@@ -196,80 +335,11 @@ $ astro build --root ./my-project-directory
 }
 ```
 
-### base
-
-<p>
-
-**类型**：`string`
-</p>
-
-你要部署到的基本路径。Astro 在开发过程中会匹配这个路径名，这样你的开发环境就会尽可能地与你的构建环境匹配。在下面的例子中，`astro dev` 会在 `/docs` 处启动你的服务器。
-
-```js
-{
-  base: '/docs'
-}
-```
-
-当使用这个选项时，你所有的静态资源导入和 URL 都需要添加 base 作为前缀。你可以通过 `import.meta.env.BASE_URL` 访问这个值。
-
-`import.meta.env.BASE_URL` 的值将由你的 `trailingSlash` 配置所决定，无论你为 `base` 设置了什么值。
-
-如果设置了 `trailingSlash: "always"`，则始终包含尾部斜杠。如果设置了 `trailingSlash: "never"`，即使 `base` 包含斜杠，`BASE_URL` 也不会包含尾部斜杠。
-
-此外，Astro 在将 `config.base` 的配置值提供给集成之前会进行内部操作。由集成读取的 `config.base` 值也同样由你的 `trailingSlash` 配置决定。
-
-在下面的示例中，在处理时 `import.meta.env.BASE_URL` 和 `config.base` 的值都将是 `/docs`：
-```js
-{
-	 base: '/docs/',
-	 trailingSlash: "never"
-}
-```
-
-在下面的示例中，在处理时 `import.meta.env.BASE_URL` 和 `config.base` 的值都将是 `/docs/`：
-
-```js
-{
-	 base: '/docs',
-	 trailingSlash: "always"
-}
-```
-
-### trailingSlash
-
-<p>
-
-**类型**：`'always' | 'never' | 'ignore'`<br />
-**默认值**：`'ignore'`
-</p>
-
-设置开发服务器的路由匹配行为。从以下选项中选择：
-
-- `'always'` - 只匹配包含尾部斜线的链接（例如：`/foo/`）。
-- `'never'` - 不匹配包含尾部斜线的链接（例如：`/foo`）。
-- `'ignore'`- 匹配链接，不管是否存在尾部的 `/`。
-
-如果你的生产主机对尾部斜杠的工作或不工作有严格的处理方式，请使用该配置选项。
-
-如果你希望自己更严格一些，那么你也可以设置这个选项，这样在开发过程中，无论是否有尾部斜杠的 URL 都不会工作。
-
-```js
-{
-  // 示例：在开发过程中要求有尾部斜线
-  trailingSlash: 'always'
-}
-```
-
-**另见**：
-
-- build.format
-
 ### scopedStyleStrategy
 
 <p>
 
-**类型：** `'where' | 'class'` | 'attribute'`<br />
+**类型：** `'where' | 'class' | 'attribute'`<br />
 **默认值：** `'attribute'`<br />
 <Since v="2.4" />
 </p>
@@ -285,54 +355,37 @@ $ astro build --root ./my-project-directory
 
 使用 `'attribute'` 在你操作元素的 `class` 属性时很有用，这样你就可以避免你自己的样式逻辑和 Astro 的样式应用之间的冲突。
 
-### adapter
+### vite
 
 <p>
-
-**类型**：`AstroIntegration`
+**类型：** `ViteUserConfig`
 </p>
 
-使用构建适配器将其部署到你最喜爱的服务器、无服务器或边缘主机。导入我们的第一方适配器 [Netlify](/zh-cn/guides/deploy/netlify/#ssr-适配器)、[Vercel](/zh-cn/guides/deploy/vercel/#ssr-适配器)，以及更多的适配器来使用 Astro SSR。
+传递额外的配置选项给 Vite。适用于需要使用一些 Astro 不支持的高级配置。
 
-[有关 SSR 的更多信息，请参见我们的服务器端渲染指南](/zh-cn/guides/server-side-rendering/)，以及[我们的部署指南](/zh-cn/guides/deploy/)以获得完整的主机列表。
+在 [vitejs.dev](https://vitejs.dev/config/) 上查看完整的 `vite` 配置对象文档。
+
+#### 示例
 
 ```js
-import netlify from '@astrojs/netlify/functions';
 {
-  // 示例：使用 Netlify 无服务器部署构建
-  adapter: netlify(),
+  vite: {
+    ssr: {
+      // 示例；如果需要的话，可以强制破坏性包跳过 SSR 处理
+      external: ['broken-npm-package'],
+    }
+  }
 }
 ```
 
-**另见**：
-
-- output
-
-### output
-
-<p>
-
-**类型**：`'static' | 'server' | 'hybrid'`<br />
-**默认值**：`'static'`
-</p>
-
-指定构建的输出目标。
-
-- `static`- 构建静态网站，部署到任何静态托管服务器上；
-- `server` - 构建应用，部署到支持 SSR（服务器端渲染）的托管服务器上；
-- `hybrid` - 构建包含少量服务端渲染页面的静态网站。
-
 ```js
-import { defineConfig } from 'astro/config';
-
-export default defineConfig({
-  output: 'static'
-})
+{
+  vite: {
+    // 示例：直接在 Astro 项目中添加自定义 Vite 插件
+    plugins: [myPlugin()],
+  }
+}
 ```
-
-**另见**：
-
-- adapter
 
 ## 构建选项
 
@@ -340,14 +393,15 @@ export default defineConfig({
 
 <p>
 
-**类型**：`('file' | 'directory')`<br />
+**类型**：`('file' | 'directory' | 'preserve')`<br />
 **默认值**：`'directory'`
 </p>
 
-控制每个页面的输出文件格式：
+控制每个页面的输出文件格式。这个值可能会由适配器帮你设置：
 
-- 如果是 `file`，Astro 将为每个页面生成一个 HTML 文件（例如："/foo.html"）。
-- 如果是 `directory`，Astro 将为每个页面生成一个有嵌套的`index.html`文件的目录（例如："/foo/index.html"）。
+  - `'file'`：Astro 将为每个路由生成一个 HTML 文件。（例如：`src/pages/about.astro` 和 `src/pages/about/index.astro` 都会打包成 `/about.html` 文件）
+  - `'directory'`：Astro 将生成一个目录，其中包含每个页面的嵌套的 `index.html` 文件。 (例如：`src/pages/about.astro` 和 `src/pages/about/index.astro` 都会打包成 `/about/index.html` 文件)
+  - `'preserve'`：Astro 将根据你的源文件夹中的文件生成 HTML 文件。 (例如：`src/pages/about.astro` 生成 `/about.html`，`src/pages/about/index.astro` 生成 `/about/index.html`)
 
 ```js
 {
@@ -441,21 +495,39 @@ export default defineConfig({
 
 <p>
 
-**类型：** `string`<br />
+**类型：** `string | Record.<string, string>`<br />
 **默认值：** `undefined`<br />
 <Since v="2.2.0" />
 </p>
 
 指定 Astro 生成的资源链接的前缀。如果资源与当前站点来自不同的域，则可以使用此选项。
 
-例如，如果设置为 `https://cdn.example.com`，则资源将从 `https://cdn.example.com/_astro/...` 获取（而不管 `base` 选项如何设置）。
+这需要将你本地的 `./dist/_astro` 文件夹中的资源上传到远程域名下相应的 `/_astro/` 文件夹中。要重命名 `_astro` 路径，请在 `build.assets` 中指定一个新的目录。
 
-你需要将 `./dist/_astro/` 中的文件上传到 `https://cdn.example.com/_astro/` 以提供资源。该过程取决于第三方域是如何托管的。要重命名 `_astro` 路径，请在 `build.assets` 中指定一个新目录。
+要获取上传到同一域名下的所有资源（例如 `https://cdn.example.com/_astro/...`），请将 `assetsPrefix` 设置为根域名的字符串（不管你的 `base` 配置如何）：
 
 ```js
 {
   build: {
     assetsPrefix: 'https://cdn.example.com'
+  }
+}
+```
+
+**新增于：** `astro@4.5.0`
+
+你也可以传递一个对象给 `assetsPrefix`，以指定每种文件类型的不同域名。
+在这种情况下，`fallback`属性是必填的，并且它将作为默认值用于任何其他文件。
+
+```js
+{
+  build: {
+    assetsPrefix: {
+      'js': 'https://js.cdn.example.com',
+      'mjs': 'https://js.cdn.example.com',
+      'css': 'https://css.cdn.example.com',
+      'fallback': 'https://cdn.example.com'
+    }
   }
 }
 ```
@@ -528,100 +600,6 @@ export default defineConfig({
 }
 ```
 
-
-### build.split
-
-:::caution[废弃]
-已于 3.0 版本中废弃。
-:::
-
-<p>
-
-**类型：** `boolean`<br />
-**默认值：** `false`
-</p>
-
-构建配置项 `build.split` 已被适配器配置项 [`functionPerRoute`](/zh-cn/reference/adapter-reference/#functionperroute) 替换。
-
-请查看你的 [SSR 适配器文档](/zh-cn/guides/integrations-guide/#官方集成) 以了解如何使用 `functionPerRoute` 来定义你的 SSR 代码如何打包。
-
-### build.excludeMiddleware
-
-
-:::caution[废弃]
-已于 3.0 版本中废弃。
-:::
-
-<p>
-
-**类型：** `boolean`<br />
-**默认值：** `false`
-</p>
-
-构建配置项 `build.excludeMiddleware` 已被适配器配置项 [`edgeMiddleware`](/zh-cn/reference/adapter-reference/#edgemiddleware) 替换。
-
-请查看你的 [SSR 适配器文档](/zh-cn/guides/integrations-guide/#官方集成) 以了解如何使用 `functionPerRoute` 来定义你的 SSR 代码如何打包。
-
-### prefetch
-
-<p>
-
-**类型：** `boolean | object`
-</p>
-
-在你的网站上为链接启用预获取，以提供更快的页面视图过渡效果。（在使用 `<ViewTransitions />` 路由器的页面上默认启用。设置 `prefetch: false` 可以选择退出此行为。）
-
-此配置自动将预获取脚本添加到项目中的每个页面上，让你可以访问 `data-astro-prefetch` 属性。将此属性添加到页面上的任何 `<a />` 链接，以启用该页面的预获取。
-
-```html
-<a href="/about" data-astro-prefetch>about</a>
-```
-
-使用 [`prefetch.defaultStrategy`](#prefetchdefaultstrategy) 和 [`prefetch.prefetchAll`](#prefetchprefetchall) 选项进一步自定义默认的预获取行为。
-
-查看 [预获取指南](/zh-cn/guides/prefetch/) 获取更多信息。
-
-### prefetch.prefetchAll
-
-<p>
-
-**类型：** `boolean`
-</p>
-
-为所有链接启用预获取，包括那些没有 `data-astro-prefetch` 属性的链接。当使用 `<ViewTransitions />` 路由器时，此值默认为 `true`。否则，默认值为 `false`。
-
-```js
-prefetch: {
-	prefetchAll: true
-}
-```
-
-当设置为 `true` 时，你可以通过在任何单独的链接上设置 `data-astro-prefetch="false"` 来单独禁用预获取。
-
-```html
-<a href="/about" data-astro-prefetch="false">About</a>
-```
-
-### prefetch.defaultStrategy
-
-<p>
-
-**类型：** `'tap' | 'hover' | 'viewport'`<br />
-**默认值：** `'hover'`
-</p>
-
-当链接上设置了 `data-astro-prefetch` 属性但没有值时，使用的默认预获取策略。
-
-- `'tap'`：在你点击链接之前进行预获取。
-- `'hover'`：当你悬停或聚焦在链接上时进行预获取。（默认）
-- `'viewport'`：当链接进入视口时进行预获取。
-
-你可以通过在属性上设置值来覆盖此默认值，并为任何单独的链接选择不同的策略。
-
-```html
-<a href="/about" data-astro-prefetch="viewport">About</a>
-```
-
 ## 服务器选项
 
 定制 Astro 开发服务器，适用于 `astro dev` 和 `astro preview`。
@@ -674,6 +652,25 @@ prefetch: {
 }
 ```
 
+### server.open
+
+<p>
+
+**类型：** `string | boolean`<br />
+**默认值：** `false`<br />
+<Since v="4.1.0" />
+</p>
+
+控制开发服务器是否应该在启动时在你的浏览器窗口中打开。
+
+传递一个完整的 URL 字符串（例如："http://example.com" ）或一个路径（例如："/about"）来指定要打开的 URL。
+
+```js
+{
+  server: { open: "/about" }
+}
+```
+
 ### server.headers
 
 <p>
@@ -684,6 +681,81 @@ prefetch: {
 </p>
 
 设置要在 `astro dev` 和 `astro preview` 中发送的自定义 HTTP 响应标头。
+
+## 开发工具栏选项
+
+### devToolbar.enabled
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `true`
+</p>
+
+是否启用 Astro 开发者工具栏。这个工具栏使你可以检查你的页面群岛、查看有用的性能和无障碍审计以及其他内容。
+
+这个选项对整个项目生效，要只为你自己禁用工具栏，运行 `npm run astro preferences disable devToolbar`。要为你的所有项目禁用工具栏，运行 `npm run astro preferences disable devToolbar --global`。
+
+## Prefetch 选项
+
+<p>
+
+**类型：** `boolean | object`
+</p>
+
+在你的网站上为链接启用预获取，以提供更快的页面视图过渡效果。（在使用 `<ViewTransitions />` 路由器的页面上默认启用。设置 `prefetch: false` 可以选择退出此行为。）
+
+此配置自动将预获取脚本添加到项目中的每个页面上，让你可以访问 `data-astro-prefetch` 属性。将此属性添加到页面上的任何 `<a />` 链接，以启用该页面的预获取。
+
+```html
+<a href="/about" data-astro-prefetch>about</a>
+```
+
+使用 [`prefetch.defaultStrategy`](#prefetchdefaultstrategy) 和 [`prefetch.prefetchAll`](#prefetchprefetchall) 选项进一步自定义默认的预获取行为。
+
+查看 [预获取指南](/zh-cn/guides/prefetch/) 获取更多信息。
+
+### prefetch.prefetchAll
+
+<p>
+
+**类型：** `boolean`
+</p>
+
+为所有链接启用预获取，包括那些没有 `data-astro-prefetch` 属性的链接。当使用 `<ViewTransitions />` 路由器时，此值默认为 `true`。否则，默认值为 `false`。
+
+```js
+prefetch: {
+	prefetchAll: true
+}
+```
+
+当设置为 `true` 时，你可以通过在任何单独的链接上设置 `data-astro-prefetch="false"` 来单独禁用预获取。
+
+```html
+<a href="/about" data-astro-prefetch="false">About</a>
+```
+
+### prefetch.defaultStrategy
+
+<p>
+
+**类型：** `'tap' | 'hover' | 'viewport' | 'load'`<br />
+**默认值：** `'hover'`
+</p>
+
+当链接上设置了 `data-astro-prefetch` 属性但没有值时，使用的默认预获取策略。
+
+- `'tap'`：在你点击链接之前进行预获取。
+- `'hover'`：当你悬停或聚焦在链接上时进行预获取。（默认）
+- `'viewport'`：当链接进入视口时进行预获取。
+- `'load'`：当页面加载后预获取当前页面的所有链接。
+
+你可以通过在属性上设置值来覆盖此默认值，并为任何单独的链接选择不同的策略。
+
+```html
+<a href="/about" data-astro-prefetch="viewport">About</a>
+```
 
 ## Image 选项
 
@@ -727,11 +799,29 @@ prefetch: {
 ```js
 {
   image: {
-    // 示例：启用基于 Sharp 的图像服务
-    service: { entrypoint: 'astro/assets/services/sharp' },
+    // 示例：通过自定义配置启用基于 Sharp 的图像服务
+    service: {
+			 entrypoint: 'astro/assets/services/sharp',
+			 config: {
+				 limitInputPixels: false,
+      },
+		 },
   },
 }
 ```
+
+#### image.service.config.limitInputPixels
+
+<p>
+
+**类型：** `number | boolean`<br />
+**默认值：** `true`<br />
+<Since v="4.1.0" />
+</p>
+
+是否限制 Sharp 图像服务处理的图像大小。
+
+设置为 `false` 来绕过 Sharp 图像服务的默认图像大小限制，以处理大图像。
 
 ### image.domains
 
@@ -798,31 +888,6 @@ prefetch: {
 
 ## Markdown 选项
 
-### markdown.drafts
-
-:::caution[废弃]
-已于 3.0 版本中废弃。请使用内容集合来替代。
-:::
-
-<p>
-
-**类型**：`boolean`<br />
-**默认值**：`false`
-</p>
-
-控制 markdown 草稿页是否应该被包含在构建中。
-
-如果 markdown 页面在 frontmatter 中包含 `draft: true`，那么它就被认为是草稿。在开发过程中会显示草稿页（`astro dev`），但在默认情况下，它们不会被包含在你的最终构建中。
-
-```js
-{
-  markdown: {
-    // 示例：在你的最终构建中包括所有的草稿
-    drafts: true,
-  }
-}
-```
-
 ### markdown.shikiConfig
 
 <p>
@@ -842,7 +907,7 @@ Shiki 配置选项。使用方法见 [markdown 配置文档](/zh-cn/guides/markd
 
 可供使用的语法高亮器：
 
-- `shiki` - 使用 [Shiki](https://github.com/shikijs/shiki) 高亮器
+- `shiki` - 使用 [Shiki](https://shiki.style) 高亮器
 - `prism` - 使用 [Prism](https://prismjs.com/) 高亮器
 - `false` - 不使用语法高亮。
 
@@ -942,52 +1007,129 @@ Astro 默认使用 [SmartyPants formatter](https://daringfireball.net/projects/s
 {
   markdown: {
     // 示例：将脚注文本翻译成另一种语言，这里是默认的英文内容
-    remarkRehype: { footnoteLabel: "Footnotes", footnoteBackLabel: "Back to content"},
+    remarkRehype: { footnoteLabel: "Footnotes", footnoteBackLabel: "Back to reference 1"},
   },
 };
 ```
 
-## 集成
+## i18n
 
-用自定义集成来扩展 Astro 功能。你可以用集成来添加框架支持（如 Solid.js）、新功能（如站点地图）和新库支持（如 Partytown）。
+<p>
 
-请阅读我们的[集成指南](/zh-cn/guides/integrations-guide/)，以帮助开始使用 Astro 集成。
+**类型：** `object`<br />
+<Since v="3.5.0" />
+</p>
+
+配置 i18n 路由，并允许你指定一些自定义选项。
+
+查看我们的指南以获取更多关于 [Astro 的国际化](/zh-cn/guides/internationalization/) 的信息。
+
+### i18n.defaultLocale
+
+<p>
+
+**类型：** `string`<br />
+<Since v="3.5.0" />
+</p>
+
+你的网站（或应用）的默认语言环境。这是一个必填字段。
+
+我们并未强制要求使用特定的语言格式或语法，但为了最大程度的兼容性，我们建议在需要的时候使用小写字母和连字符（例如 "es"、"pt-br"）。
+
+### i18n.locales
+
+<p>
+
+**类型：** `Locales`<br />
+<Since v="3.5.0" />
+</p>
+
+网站所支持的包含 `defaultLocale` 在内所有语言环境的列表。这是一个必填字段。
+
+语言可以列为单独的代码（例如 `['en', 'es', 'pt-br']`）或映射到同一个 `path` 的多个代码（例如 `{ path: "english", codes: ["en", "en-US"]}`）。这些代码将用于确定你部署的网站的 URL 结构。
+
+没有强制执行特定的语言格式或语法，但你的文件夹结构必须与列表中的语言环境完全匹配。当多个 `codes` 指向同一个自定义的 URL 路径前缀时，将你的内容文件存储在与配置的 `path` 相同的文件夹中。
+
+### i18n.fallback
+
+<p>
+
+**类型：** `Record.<string, string>`<br />
+<Since v="3.5.0" />
+</p>
+
+当导航到不存在的页面时（例如，尚未创建翻译页面）的回退策略。
+
+使用这个对象为你支持的每种语言声明一个回退的 `locale` 路由。如果没有指定回退，那么无法访问的页面将返回 404。
+
+##### 示例
+
+以下示例配置你的内容回退策略，将 `/pt-br/` 中无法访问的页面重定向到它们的 `es` 版本，将 `/fr/` 中无法访问的页面重定向到它们的 `en` 版本。无法访问的 `/es/` 页面将返回 404。
 
 ```js
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
-{
-  // 示例：添加 React + Tailwind 支持
-  integrations: [react(), tailwind()]
-}
+export default defineConfig({
+	i18n: {
+		defaultLocale: "en",
+		locales: ["en", "fr", "pt-br", "es"],
+		fallback: {
+			pt: "es",
+		  fr: "en"
+		}
+	}
+})
 ```
 
-## Vite
+### i18n.routing
 
-传递额外的配置选项给 Vite。适用于需要使用一些 Astro 不支持的高级配置。
+<p>
 
-在 [vitejs.dev](https://vitejs.dev/config/) 上查看完整的 `vite` 配置对象文档。
+**类型：** `Routing`<br />
+<Since v="3.7.0" />
+</p>
 
-#### 示例
+控制路由策略以确定你的网站 URL。请根据你的默认语言的文件夹（或 URL）路径配置来进行设置。
 
+#### i18n.routing.prefixDefaultLocale
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `false`<br />
+<Since v="3.7.0" />
+</p>
+
+当设为 `false` 时，只有非默认语言的 URL 才会显示语言前缀。
+`defaultLocale` 不会显示语言前缀，内容文件也不会存在于本地化的文件夹中。
+非默认语言的 URL 会类似于 `example.com/[locale]/content/`，而默认语言的 URL 则是 `example.com/content/`。
+
+当设为 `true` 时，所有 URL 都会显示语言前缀。
+包括默认语言在内所有的 URL 都会是 `example.com/[locale]/content/`。
+包括默认语言的所有语言都会使用本地化的文件夹。
+
+#### i18n.routing.redirectToDefaultLocale
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `true`<br />
+<Since v="4.2.0" />
+</p>
+
+可以用来配置由 `src/pages/index.astro` 生成的主页 URL (`/`) 是否在设置 `prefixDefaultLocale: true` 时重定向到 `/[defaultLocale]`。
+
+设置 `redirectToDefaultLocale: false` 可以在你的网站根目录禁用这个自动重定向：
 ```js
-{
-  vite: {
-    ssr: {
-      // 示例；如果需要的话，可以强制破坏性包跳过 SSR 处理
-      external: ['broken-npm-package'],
+// astro.config.mjs
+export default defineConfig({
+  i18n:{
+    defaultLocale: "en",
+		locales: ["en", "fr"],
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false
     }
   }
-}
-```
-
-```js
-{
-  vite: {
-    // 示例：直接在 Astro 项目中添加自定义 Vite 插件
-    plugins: [myPlugin()],
-  }
-}
+})
 ```
 
 ## Legacy 标志
@@ -1000,132 +1142,31 @@ import tailwind from '@astrojs/tailwind';
 
 Astro 提供了实验性标志，以便用户提前使用新功能。这些标志不保证稳定。
 
-### experimental.optimizeHoistedScript
 
-<p>
-
-**类型：** `布尔值`<br />
-**默认值：** `false`<br />
-<Since v="2.10.4" />
-</p>
-
-该项是防止未使用的组件脚本意外地出现在页面中。
-
-尽管 Astro 已经尽可能在优化时排除掉未使用的脚本，但还是有可能会遗漏。所以在发布之前，请务必再次检查生成的页面。
-
-想要启用提升脚本分析优化功能，可以添加如下实验性标志：
-
-```js
-{
-	experimental: {
-		optimizeHoistedScript: true,
-	},
-}
-```
-
-### experimental.devOverlay
+### experimental.directRenderScript
 
 <p>
 
 **类型：** `boolean`<br />
 **默认值：** `false`<br />
-<Since v="3.4.0" />
+<Since v="4.5.0" />
 </p>
 
-在开发模式下启用开发者浮岛。这个浮岛允许你检查你的页面岛屿、查看关于性能和可访问性的有用审计等。
+启用一种更可靠的策略，以防止在不使用的页面中执行脚本。
+
+脚本将直接按照在 Astro 文件中声明的方式渲染（包括现有的特性，如 TypeScript，导入 `node_modules`，以及脚本去重）。现在，你也可以在你的 Astro 文件中有条件地渲染脚本。
+然而，这意味着脚本不再提升到 `<head>` 中，且页面上的多个脚本不再被打包在一起。
+如果你启用了这个选项，你应该检查所有的 `<script>` 标签是否按预期行为。
+
+这个选项将在 Astro 5.0 中默认启用。
 
 ```js
 {
-	experimental: {
-		devOverlay: true,
-	},
+  experimental: {
+    directRenderScript: true,
+  },
 }
 ```
-
-### experimental.i18n
-
-<p>
-
-**类型：** `object`<br />
-<Since v="3.5.0" />
-</p>
-
-配置实验性的 i18n 路由，并允许你指定一些自定义选项。
-
-查看我们的指南以获取更多关于 [Astro 的国际化](/zh-cn/guides/internationalization/) 的信息。
-
-### experimental.i18n.defaultLocale
-
-<p>
-
-**类型：** `string`<br />
-<Since v="3.5.0" />
-</p>
-
-你的网站（或应用）的默认语言环境。这是一个必填字段。
-
-我们并未强制要求使用特定的语言格式或语法，但为了最大程度的兼容性，我们建议在需要的时候使用小写字母和连字符（例如 "es"、"pt-br"）。
-
-### experimental.i18n.locales
-
-<p>
-
-**类型：** `Array.<string>`<br />
-<Since v="3.5.0" />
-</p>
-
-网站支持的所有语言环境的列表（例如 `['en', 'es', 'pt-br']`）。这个列表也应该包含 `defaultLocale`。这是一个必填字段。
-
-没有强制执行特定的语言格式或语法，但你的文件夹结构必须与列表中的语言环境完全匹配。
-
-### experimental.i18n.fallback
-
-<p>
-
-**类型：** `Record.<string, string>`<br />
-<Since v="3.5.0" />
-</p>
-
-当导航到不存在的页面时（例如，尚未创建翻译页面）的回退策略。
-
-使用这个对象为你支持的每种语言声明一个回退的 `locale` 路由。如果没有指定回退，那么无法访问的页面将返回 404。
-
-#### 示例
-
-以下示例配置你的内容回退策略，将 `/pt-br/` 中无法访问的页面重定向到它们的 `es` 版本，将 `/fr/` 中无法访问的页面重定向到它们的 `en` 版本。无法访问的 `/es/` 页面将返回 404。
-
-```js
-export default defineConfig({
-	experimental: {
-		i18n: {
-			defaultLocale: "en",
-      locales: ["en", "fr", "pt-br", "es"],
-			fallback: {
-				pt: "es",
-			  fr: "en"
-			}
-		}
-	}
-})
-```
-
-### experimental.i18n.routingStrategy
-
-<p>
-
-**类型：** `'prefix-always' | 'prefix-other-locales'`<br />
-**默认值：** 'prefix-other-locales'<br />
-<Since v="3.5.0" />
-</p>
-
-控制路由策略以确定你的网站 URL。请根据你的默认语言的文件夹（或 URL）路径配置来进行设置：
-
-- `prefix-other-locales`（默认）：只有非默认语言会显示语言前缀。
-  `defaultLocale` 不会显示语言前缀，且内容文件不存在于本地化的文件夹中。
-  对于所有非默认语言，URL 的形式将为 `example.com/[lang]/content/`，但对于默认语言环境，URL 的形式将为 `example.com/content/`。
-- `prefix-always`：所有 URL 都会显示语言前缀。
-  对于每个路由，包括默认语言，URL 的形式将为 `example.com/[lang]/content/`。
-  每种语言，包括默认语言，都使用本地化文件夹。
 
 ### experimental.contentCollectionCache
 
@@ -1145,3 +1186,158 @@ export default defineConfig({
 	},
 }
 ```
+
+### experimental.contentCollectionJsonSchema
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `false`<br />
+<Since v="4.5.0" />
+</p>
+
+此功能将为 `type: 'data'` 的内容集合自动生成一个 JSON 模式，该模式可用作 VSCode 等工具中 TypeScript 风格的自动完成/提示的 `$schema` 值。
+
+要启用此功能，请添加实验性标志：
+
+```diff
+import { defineConfig } from 'astro/config';
+export default defineConfig({
+	experimental: {
++		contentCollectionJsonSchema: true
+	}
+});
+```
+
+此实验性实现要求你在内容集合的每个数据条目文件中手动引用模式：
+
+```diff
+// src/content/test/entry.json
+{
++  "$schema": "../../../.astro/collections/test.schema.json",
+	"test": "test"
+}
+```
+
+或者，你也可以在你的 [VSCode `json.schemas` 设置](https://code.visualstudio.com/docs/languages/json#_json-schemas-and-settings)中进行配置：
+
+```diff
+"json.schemas": [
+	{
+		"fileMatch": [
+			"/src/content/test/**"
+		],
+		"url": "./.astro/collections/test.schema.json"
+	}
+]
+```
+
+请注意，这个初始实现使用了一个库，该库对于高级 Zod 模式有[已知的问题](https://github.com/StefanTerdell/zod-to-json-schema#known-issues)，因此在启用实验性标志之前，你可能希望查阅这些限制。
+
+### experimental.clientPrerender
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `false`<br />
+<Since v="4.2.0" />
+</p>
+
+允许在支持的浏览器中启用客户端预渲染来预获取页面。
+
+此功能使用实验性的 [推测规则 Web API](https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API)，并全局增强默认的 `prefetch` 行为，以在客户端预渲染链接。
+在启用此功能之前，你可能希望查看 [在客户端预渲染时可能的风险](https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API#unsafe_prefetching)。
+
+在你的 `astro.config.mjs` 中启用客户端预渲染，以及任何所需的 `prefetch` 配置选项：
+
+```js
+// astro.config.mjs
+{
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
+	experimental: {
+		clientPrerender: true,
+	},
+}
+```
+
+继续在你网站上的任何 `<a />` 链接上使用 `data-astro-prefetch` 属性来使用预获取。
+不要将 `<link>` 标签添加到文档的头部或使用 JavaScript 获取页面，而是添加一个带有相应推测规则的 `<script>` 标签。
+
+客户端预渲染需要浏览器支持。如果不支持 `推测规则 API(Speculation Rules API)`，`prefetch` 将回退到支持的策略。
+
+查看 [预获取指南](/zh-cn/guides/prefetch/) 以获取更多 `prefetch` 选项和使用方法。
+
+### experimental.globalRoutePriority
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `false`<br />
+<Since v="4.2.0" />
+</p>
+
+将重定向和注入路由与基于文件的项目路由进行同等优先级处理，所有路由都遵循相同的[路由优先级顺序规则](/zh-cn/guides/routing/#路由优先级顺序)。
+
+这允许你在项目中对路由有更多的控制，不会自动优先处理某些类型的路由，并且标准化所有路由的路由优先级顺序。
+
+以下示例显示了当如下所示组合文件基础路由、注入路由和重定向时，哪个路由将构建特定页面的 URL：
+- 文件基础路由：`/blog/post/[pid]`
+- 文件基础路由：`/[page]`
+- 注入路由：`/blog/[...slug]`
+- 重定向：`/blog/tags/[tag]` -> `/[tag]`
+- 重定向：`/posts` -> `/blog`
+
+启用 `experimental.globalRoutingPriority`（而不是 Astro 4.0 默认的路由优先级顺序）：
+
+- `/blog/tags/astro` 由重定向到 `/tags/[tag]` 构建（而不是注入路由 `/blog/[...slug]`）
+- `/blog/post/0` 由文件基础路由 `/blog/post/[pid]` 构建（而不是注入路由 `/blog/[...slug]`）
+- `/posts` 由重定向到 `/blog` 构建（而不是文件基础路由 `/[page]`）
+
+
+在路由冲突的情况下，两个具有相同路由优先级的路由试图构建相同的 URL，Astro 将记录警告，标识出冲突的路由。
+
+
+### experimental.i18nDomains
+
+<p>
+
+**类型：** `boolean`<br />
+**默认值：** `false`<br />
+<Since v="4.3.0" />
+</p>
+
+启用域名支持，用于[实验性的 `domains` 路由策略](/zh-cn/guides/internationalization/#domains-experimental)，它允许你配置一个或多个支持的语言的 URL 模式，以使用自定义域名（或子域名）。
+
+当一个语言环境映射到一个域名时，将不会使用 `/[locale]/` 路径前缀。然而，`src/pages/` 中的本地化文件夹仍然是必需的，包括你配置的 `defaultLocale`。
+
+其他未配置的语言环境将默认为根据你的 `prefixDefaultLocale` 策略进行本地化的路径 URL（例如 `https://example.com/[locale]/blog`）。
+
+```js
+//astro.config.mjs
+export default defineConfig({
+	site: "https://example.com",
+	output: "server", // 不需要预渲染的页面
+	adapter: node({
+		mode: 'standalone',
+	}),
+	i18n: {
+		defaultLocale: "en",
+		locales: ["en", "fr", "pt-br", "es"],
+		prefixDefaultLocale: false,
+		domains: {
+			fr: "https://fr.example.com",
+			es: "https://example.es",
+		},
+	},
+	experimental: {
+		i18nDomains: true,
+	},
+});
+```
+
+`astro:i18n` 辅助函数 [`getAbsoluteLocaleUrl()`](/zh-cn/guides/internationalization/#getabsolutelocaleurl) 和 [`getAbsoluteLocaleUrlList()`](/zh-cn/guides/internationalization/#getabsolutelocaleurllist)  构建的页面路由和 URL 将使用 `i18n.domains` 中设置的选项。
+
+查看 [国际化指南](/zh-cn/guides/internationalization/#domains-experimental) 以获取更多细节，包括这个实验性功能的限制。
